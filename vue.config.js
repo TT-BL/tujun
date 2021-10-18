@@ -1,3 +1,8 @@
+const px2rem = require('postcss-px2rem')
+const postcss = px2rem({
+  // 基准大小 baseSize，需要和rem.js中相同
+  remUnit: 16
+})
 module.exports = {
   // 项目部署的基础路径
   // 我们默认假设你的应用将会部署在域名的根部，
@@ -6,13 +11,19 @@ module.exports = {
   // 指定子路径。比如，如果你的应用部署在
   // https://www.foobar.com/my-app/
   // 那么将这个值改为 `/my-app/`
-  publicPath: '/tujun',　　/*这个是我存放在github在线预览的Reader项目*/
+  publicPath: './',　　/*这个是我存放在github在线预览的Reader项目*/
 
   // 将构建好的文件输出到哪里（或者说将编译的文件）
   outputDir: 'dist',
 
   // 放置静态资源的地方 (js/css/img/font/...)
   assetsDir: '',
+
+  //定义根目录
+  chainWebpack: config => {
+    config.resolve.alias
+      .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+  },
 
   // 用于多页配置，默认是 undefined
   pages: {
@@ -36,7 +47,7 @@ module.exports = {
   // 是否在保存的时候使用 `eslint-loader` 进行检查。
   // 有效的值：`ture` | `false` | `"error"`
   // 当设置为 `"error"` 时，检查出的错误会触发编译失败。
-  lintOnSave: true,
+  lintOnSave: false,
 
   // 使用带有浏览器内编译器的完整构建版本
   // 查阅 https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时
@@ -51,8 +62,8 @@ module.exports = {
 
   // 调整内部的 webpack 配置。
   // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/webpack.md
-  chainWebpack: () => {},
-  configureWebpack: () => {},
+  chainWebpack: () => { },
+  configureWebpack: () => { },
 
   // CSS 相关选项
   css: {
@@ -65,7 +76,13 @@ module.exports = {
 
     // 为预处理器的 loader 传递自定义选项。比如传递给
     // sass-loader 时，使用 `{ sass: { ... } }`。
-    loaderOptions: {},
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          postcss
+        ]
+      }
+    },
 
     // 为所有的 CSS 及其预处理文件开启 CSS Modules。
     // 这个选项不会影响 `*.vue` 文件。
@@ -82,24 +99,26 @@ module.exports = {
 
   // 配置 webpack-dev-server 行为。
   devServer: {
-    open: process.platform === 'darwin',
+    disableHostCheck: true,
+    // open: process.platform === 'darwin',
+    open: false,
     host: '0.0.0.0',
     port: 8080,
     https: false,
     hotOnly: false,
     // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#配置代理
     proxy: {
-          '/api': {
-                target: 'http://localhost:8880',
-                changeOrigin: true,
-                secure: false,
-                // ws: true,
-                pathRewrite: {
-                    // '^/api': '/static/mock'   // 请求数据路径别名,这里是注意将static/mock放入public文件夹
-                }
-          }
-   },
-   before: app => {}
+      '/api': {
+        target: 'www.tujun168.com',
+        changeOrigin: true,
+        // secure: false,
+        // ws: true,
+        pathRewrite: {
+          '^/api': '/'   // 请求数据路径别名,这里是注意将static/mock放入public文件夹
+        }
+      }
+    },
+    before: app => { }
   },
 
   // 三方插件的选项

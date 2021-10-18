@@ -1,19 +1,21 @@
 <template>
+<div class="content">
     <div class="login">
         <div class="header">
-            <img class="logo" src="../assets/login/logo@2x.png" alt="">
+            <img class="logo" src="../assets/img/login/logo@2x.png" alt="">
             <div class="search">
-                <div class="search_left">
+                <!-- <div class="search_left">
                     <input class="seach_input" :placeholder="$t('login.searchPla')"/>
-                    <img class="search_img" src="../assets/login/home_souso.png" alt="">
-                </div>
-                <div class="lag_chenge" @click="changeLanguage">EN/中</div>
+                    <img class="search_img" src="../assets/login/login_search.svg" alt="">
+                </div> -->
+                <div class="lag_chenge" @click="changeLanguage('en')">EN</div>
+                <div class="lag_chenge" @click="changeLanguage('zh')">/中</div>
             </div>
         </div>
         <div class="main">
             <div class="main-left">
-                <el-carousel height="480px" arrow="never">
-                    <el-carousel-item v-for="(item,index) in carouselData" :key="index">
+                <el-carousel class="carousel_box" arrow="never">
+                    <el-carousel-item class="carousel_son" v-for="(item,index) in carouselData" :key="index">
                         <div class="rotation" v-for="(item1,index1) in item" :key="index1">
                             <div class="rotation_title">{{item1.title}}</div>
                             <div class="rotation_value">{{item1.value}}</div>
@@ -28,12 +30,12 @@
                     <div class="line"></div>
                 </div>
                 <div class="input_box first-input">
-                    <img class="account_img" src="../assets/login/home_denglu_zhanghao.png" alt="">
-                    <input class="box_input" :placeholder="$t('login.accountPlc')"/>
+                    <img class="account_img" src="../assets/img/login/home_denglu_zhanghao.png" alt="">
+                    <input v-model="username" class="box_input" :placeholder="$t('login.accountPlc')"/>
                 </div>
                 <div class="input_box">
-                    <img class="password_img box_img" src="../assets/login/home_denglu_mima.png" alt="">
-                    <input class="box_input" type="password" :placeholder="$t('login.pwd')"/>
+                    <img class="password_img box_img" src="../assets/img/login/home_denglu_mima.png" alt="">
+                    <input v-model="password" class="box_input" type="password" :placeholder="$t('login.pwd')"/>
                 </div>
                 <div class="oprator">
                     <div class="remember">
@@ -41,28 +43,61 @@
                     </div>
                     <div class="forget">{{$t('login.forgetPassword')}}?</div>
                 </div>
-                <div class="login_btn">{{$t('login.loginText')}}</div>
+                <!-- <vue-simple-verify ref="verify" @success="success" /> -->
+                <div class="login_btn" @click="login" v-if="!isLogin">{{$t('login.loginText')}}</div>
+                <div class="login_btn" @click="login" v-else>{{$t('login.logging')}}</div>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
+import cookie from '../utils/cookie';
 export default {
     data() {
         return {
             remPaw: false,
-            carouselData: []
+            carouselData: [],
+            username: '',
+            password: '',
+            isLogin: false,
         }
     },
     created() {
         console.log(this.$t)
-        this.carouselData = this.$t('login.carouselData')
+        this.carouselData = this.$t('login.carouselData');
+        this.loadAccountInfo();
     },
     methods: {
+        //判断是否已登陆
+        loadAccountInfo(){
+            //zhaopeng&A15hOsu8YeGnCsjb
+            let accountInfo = cookie.getCookie('accountInfo');
+            //如果cookie里没有账号信息
+            if(Boolean(accountInfo) == false){
+                console.log('cookie中没有检测到账号信息！');
+                return false;
+            }
+            else{
+            //如果cookie里有账号信息
+                console.log('cookie中检测到账号信息！现在开始预填写！');
+                let userName = "";
+                let passWord = "";
+                let index = accountInfo.indexOf("&");
+ 
+                userName = accountInfo.substring(0,index);
+                passWord = accountInfo.substring(index+1);
+ 
+                this.username = userName;
+                this.password = passWord;
+                this.remPaw = true;
+            }
+        },
         //切换语言
-        changeLanguage(){
-            if(this.$i18n.locale == 'zh'){
+        changeLanguage(language){
+            console.log(language);
+            if(language == 'en'){
                 localStorage.setItem('locale', 'en');
                 this.$i18n.locale = localStorage.getItem('locale');
             } else{
@@ -70,6 +105,50 @@ export default {
                 this.$i18n.locale = localStorage.getItem('locale');
             }
             this.carouselData = this.$t('login.carouselData')
+        },
+        //点击登录
+        login() {
+            this.isLogin = true;
+            this.$router.push({path: '/homePage'})
+            // let accountInfo = this.username + "&" + this.password;
+            // let params = {
+            //     user_name: this.username,
+            //     password: this.password,
+            // }
+            // params = this.$qs.stringify(params,{indices: false})
+            // this.$axios({
+            //     method: 'post',
+            //     url: '/v1/index/login',
+            //     data: params
+            // }).then(res => {
+            //     this.isLogin = false;
+            //     if(res.data.status == 200){
+            //         if(this.remPaw){
+            //             console.log("勾选了记住密码，现在开始写入cookie");
+            //             cookie.setCookie('accountInfo',accountInfo,1440*3);
+            //         }
+            //         else{
+            //             console.log("没有勾选记住密码，现在开始删除账号cookie");
+            //             cookie.delCookie('accountInfo');
+            //         }
+            //         localStorage.setItem('token',res.data.data.token);
+            //         this.$router.push({path: 'homePage'})
+            //         // window.location.href = res.data.data.redirectUrl;
+            //     }
+            //     else{
+            //         this.$message({
+            //             message: res.data.msg,
+            //             type: 'warning'
+            //         })
+            //     }
+            // }).catch((err) => {
+            //     console.log(err)
+            //     this.$message({
+            //         message: err,
+            //         type: 'warning'
+            //     })
+            //     this.isLogin = false;
+            // })
         },
     }
 }
@@ -98,18 +177,24 @@ export default {
             color: #999;
         } /* IE浏览器 */
     }
-    .login{
+    .content {
         width: 100%;
-        min-height: 100%;
-        padding: 3% 10% 5%;
-        background: url('../assets/login/login_bg.jpg') no-repeat;
+        height: 100%;
+        padding: 48px 0 326px;
+        background: url('../assets/img/login/login_bg.jpg') no-repeat;
         background-size: cover;
+        // background-color: blue;
+    }
+    .login{
+        width: 1440px;
+        height: 705px;
+        margin: 0 auto;
         //上半部分
         .header{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6%;
+            margin-bottom: 146px;
         }
         .logo{
             width: 247px;
@@ -143,6 +228,7 @@ export default {
             font-size: 22px;
             color: #DFE2E2;
             cursor: pointer;
+            line-height: 22px;
         }
         //主要内容
         .main{
@@ -151,19 +237,37 @@ export default {
             align-items: flex-end;
         }
         .main-left{
-            width: 400px;
+            width: 440px;
+            height: 480px;
+            padding-top: 40px;
+            overflow: hidden;
+            /deep/ .carousel_box{
+                width: 100%;
+                height: 100%;
+                padding-left: 8px;
+                .el-carousel__container{
+                    height: 413px;
+                }
+                
+            }
+            
+            
         }
         .rotation{
-            margin-bottom: 66px;
+            // margin-bottom: 66px;
             color: #FFFFFF;
             text-align: left;
             .rotation_title{
-                margin-bottom: 6px;
+                margin-bottom: 17px;
                 font-size: 36px;
                 font-weight: bold;
+                line-height: 36px;
             }
             .rotation_value{
+                height: 84px;
                 font-size: 18px;
+                line-height: 18px;
+                // border: 1px solid red;
             }
         }
         //轮播点
@@ -197,7 +301,7 @@ export default {
                 align-items: center;
                 margin-bottom: 51px;
                 span{
-                    margin: 0 17px;
+                    margin: 0 25px;
                     font-size: 30px;
                     font-weight: bold;
                     color: #FFFFFF;
@@ -209,7 +313,7 @@ export default {
                 border-top: 1px solid rgba(255,255,255,.5);
             }
             .input_box{
-                width: 296px;
+                width: 100%;
                 height: 42px;
                 display: flex;
                 align-items: center;
@@ -235,7 +339,7 @@ export default {
                 margin-bottom: 26px;
             }
             .oprator{
-                width: 296px;
+                width: 100%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -247,19 +351,24 @@ export default {
                     cursor: pointer;
                 }
                 .remember{
-                    // cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    vertical-align: middle;
                 }
                 /deep/ .el-checkbox__inner{
-                    width: 12px;
-                    height: 12px;
+                    width: 14px;
+                    height: 14px;
                     margin-right: 4px;
                     border: 1px solid #666666;
                     border-radius: 2px;
                     background: transparent;
                 }
             }
+            .simple-verify{
+                width: 100% !important;
+            }
             .login_btn{
-                width: 296px;
+                width: 100%;
                 height: 42px;
                 background: #1AA6BB;
                 border-radius: 6px;
