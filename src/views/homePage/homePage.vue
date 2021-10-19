@@ -38,12 +38,18 @@
       </div>
       <div id='myMap'></div>
     </div>
+
+    <trajectory/>
   </div>
 </template>
 
 
 <script>
+import trajectory from './trajectory.vue'
 export default {
+  components: {
+    trajectory
+  },
   data() {
     return {
       title: 1111,
@@ -73,10 +79,10 @@ export default {
   // },
   mounted() {
     let timer = setInterval(() => {
-      // if(Microsoft){
+      if(Microsoft){
         this.loadMapScenario();
         clearInterval(timer)
-      // }
+      }
     },1000)
   },
   methods: {
@@ -397,6 +403,7 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
+  @import '../../assets/css/form.scss';
   .header_statistics{
     display: flex;
     justify-content: space-between;
