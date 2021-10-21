@@ -39,15 +39,17 @@
       <div id='myMap'></div>
     </div>
 		<editPop v-if="editShow"></editPop>
+    <trajectory/>
   </div>
 </template>
 
 
 <script>
-import editPop from './homePageBox/editPop.vue'
+import editPop from './homePageBox/editPop.vue';
+import trajectory from './trajectory.vue'
 export default {
 	components:{
-		editPop,
+		editPop,trajectory
 	},
   data() {
     return {
@@ -80,10 +82,10 @@ export default {
   // },
   mounted() {
     let timer = setInterval(() => {
-      // if(Microsoft){
+      if(Microsoft){
         this.loadMapScenario();
         clearInterval(timer)
-      // }
+      }
     },1000)
   },
   methods: {
@@ -434,6 +436,7 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
+  @import '../../assets/css/form.scss';
   .header_statistics{
     display: flex;
     justify-content: space-between;

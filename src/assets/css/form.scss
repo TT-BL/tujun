@@ -1,0 +1,21 @@
+/deep/ .el-form{
+  .el-form-item__label{
+    font-size: 16px;
+    font-weight: 600;
+    color: #151F2E;
+  }
+  .el-button{
+    width: 88px;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .el-button--primary{
+    background: #12C6C5;
+    color: #FFFFFF;
+  }
+  .el-button--default{
+    border: 1px solid #12C6C5;
+    color: #12C6C5;
+  }
+}
