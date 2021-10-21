@@ -38,12 +38,17 @@
       </div>
       <div id='myMap'></div>
     </div>
+		<editPop v-if="editShow"></editPop>
   </div>
 </template>
 
 
 <script>
+import editPop from './homePageBox/editPop.vue'
 export default {
+	components:{
+		editPop,
+	},
   data() {
     return {
       title: 1111,
@@ -65,6 +70,8 @@ export default {
       closeImg: require('../../assets/img/home/close.png'),
       shebeiImg: require('../../assets/img/home/shebei@2x.png'),
       dianliangImg: require('../../assets/img/home/dianliang@2x.png'),
+			circleArray: [],
+			editShow: false,
     }
   },
   // created() {
@@ -154,106 +161,136 @@ export default {
       }
     },
     showInfobox(pin) {
-      let infoboxTemplate = 
-      '<div class="infoboxText">\
-        <div class="infobox_header">\
-          <div class="header_left">\
-            {shebei}{title}\
-          </div>\
-          {closeImg}\
-        </div>\
-        <div class="infobox_center">\
-          <div class="center_item">\
-            <div class="item_label">{firstLabel}</div>\
-            <div class="item_value">{title}</div>\
-          </div>\
-          <div class="center_item">\
-            <div class="item_label">{secondLabel}</div>\
-            <div class="item_value">KH210609"AE7063湘A037挂</div>\
-          </div>\
-          <div class="center_item">\
-            <div class="item_label">{threeLabel}</div>\
-            <div class="item_value">2021-07-2621:31:32</div>\
-          </div>\
-          <div class="center_item">\
-            <div class="item_label">{address}</div>\
-            <div class="item_value">俄罗斯莫斯科州</div>\
-          </div>\
-          <div class="center_box">\
-            <div class="center_left">\
-              <div class="center_item">\
-                <div class="item_label">{sudu}</div>\
-                <div class="item_value">0.00</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{shidu}</div>\
-                <div class="item_value">0</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{qiya}</div>\
-                <div class="item_value">951</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{dianliang}</div>\
-                <div class="item_value">{dianliang}48%</div>\
-              </div>\
-            </div>\
-            <div class="center_right">\
-              <div class="center_item">\
-                <div class="item_label">{jia}</div>\
-                <div class="item_value">0.30</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{wendu}</div>\
-                <div class="item_value">0</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{guangzhao}</div>\
-                <div class="item_value">0</div>\
-              </div>\
-              <div class="center_item">\
-                <div class="item_label">{dingwei}</div>\
-                <div class="item_value">基站定位</div>\
-              </div>\
-            </div>\
-          </div>\
-        </div>\
-        <div class="infobox_bottom">\
-          <div class="edit_btn">{editBtn}</div>\
-          <div class="trajectory_btn edit_btn">{guijiBtn}</div>\
-        </div>\
-      </div>';
-      let shebeImg = '<img class="shebei_img" src="https://i.loli.net/2021/10/17/Nfb1dg8H7ZOosCi.png" alt="">'
-      let dianliang = `<img class="dianliang_img" src="${this.dianliangImg}" alt="">`
-      let closeImg = `<img class="close_img" src="https://i.loli.net/2021/10/17/sGVk38N9eLgQacf.png">`
-      // let closeImg = `<a class="close_img" href="javascript:${that.closeInfobox(11)}" class="customInfoboxCloseButton">X</a>`
-      let infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(pin.geometry.y, pin.geometry.x), {
-        htmlContent: infoboxTemplate.replace('{firstLabel}',this.$t('home.firstLable')).replace('{secondLabel}',this.$t('home.secondLabel')).replace('{threeLabel}',this.$t('home.threeLabel'))
-        .replace('{address}',this.$t('home.address')).replace('{sudu}',this.$t('home.sudu')).replace('{shidu}',this.$t('home.shidu'))
-        .replace('{qiya}',this.$t('home.qiya')).replace('{dianliang}',this.$t('home.dianliang')).replace('{jia}',this.$t('home.jiasudu'))
-        .replace('{wendu}',this.$t('home.wendu')).replace('{guangzhao}',this.$t('home.guangzhao')).replace('{dingwei}',this.$t('home.dingwei'))
-        .replace('{editBtn}',this.$t('home.editBtn')).replace('{guijiBtn}',this.$t('home.guijiBtn'))
-        .replace(/{title}/g,pin.entity.title).replace(/{shebei}/g,shebeImg).replace(/{closeImg}/g,closeImg).replace(/{dianliang}/g,dianliang)
-      });
-      infobox.setMap(this.map);
-      infobox.setOptions({
-        showCloseButton: true,
-        visible: true,
-        offset: new Microsoft.Maps.Point(-259, 50)
-      });
-      this.$nextTick(() => {
-        //关闭事件
-        let closeImgDom = document.querySelectorAll('.close_img')
-        console.log(closeImgDom);
-        for(let i = 0;i<closeImgDom.length;i++){
-          closeImgDom[i].addEventListener('click',(e)=>{
-            console.log(e)
-            infobox.setOptions({
-              visible: false,
-            });
-          })
-        }
-      })
+			let closeImgDom = document.querySelectorAll('.close_img');
+			console.log(closeImgDom);
+			let editDom = document.querySelectorAll('.edit_div');
+			//关闭所有弹窗
+			this.circleArray.forEach(value => {
+				value.infobox.setOptions({
+				  visible: false,
+				});
+			})
+			let index  = this.circleArray.findIndex(value => {return value.id == pin.entity.title});
+			console.log(index);
+			if(index != -1) {
+				this.circleArray[index].infobox.setOptions({
+				  showCloseButton: true,
+				  visible: true,
+				  offset: new Microsoft.Maps.Point(-259, 50)
+				});
+				closeImgDom[index].addEventListener('click',(e)=>{
+					console.log(e)
+					this.circleArray[index].infobox.setOptions({
+						visible: false,
+					});
+				})
+				editDom[index].addEventListener('click',(e)=>{
+				  this.editShow = true;
+					console.log(this.editShow)
+				})
+			}else{
+				let infoboxTemplate =
+				'<div class="infoboxText">\
+				  <div class="infobox_header">\
+				    <div class="header_left">\
+				      {shebei}{title}\
+				    </div>\
+				    {closeImg}\
+				  </div>\
+				  <div class="infobox_center">\
+				    <div class="center_item">\
+				      <div class="item_label">{firstLabel}</div>\
+				      <div class="item_value">{title}</div>\
+				    </div>\
+				    <div class="center_item">\
+				      <div class="item_label">{secondLabel}</div>\
+				      <div class="item_value">KH210609"AE7063湘A037挂</div>\
+				    </div>\
+				    <div class="center_item">\
+				      <div class="item_label">{threeLabel}</div>\
+				      <div class="item_value">2021-07-2621:31:32</div>\
+				    </div>\
+				    <div class="center_item">\
+				      <div class="item_label">{address}</div>\
+				      <div class="item_value">俄罗斯莫斯科州</div>\
+				    </div>\
+				    <div class="center_box">\
+				      <div class="center_left">\
+				        <div class="center_item">\
+				          <div class="item_label">{sudu}</div>\
+				          <div class="item_value">0.00</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{shidu}</div>\
+				          <div class="item_value">0</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{qiya}</div>\
+				          <div class="item_value">951</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{dianliang}</div>\
+				          <div class="item_value">{dianliang}48%</div>\
+				        </div>\
+				      </div>\
+				      <div class="center_right">\
+				        <div class="center_item">\
+				          <div class="item_label">{jia}</div>\
+				          <div class="item_value">0.30</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{wendu}</div>\
+				          <div class="item_value">0</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{guangzhao}</div>\
+				          <div class="item_value">0</div>\
+				        </div>\
+				        <div class="center_item">\
+				          <div class="item_label">{dingwei}</div>\
+				          <div class="item_value">基站定位</div>\
+				        </div>\
+				      </div>\
+				    </div>\
+				  </div>\
+				  <div class="infobox_bottom">\
+				    <div class="edit_div edit_btn">{editBtn}</div>\
+				    <div class="trajectory_btn edit_btn">{guijiBtn}</div>\
+				  </div>\
+				</div>';
+				let shebeImg = '<img class="shebei_img" src="https://i.loli.net/2021/10/17/Nfb1dg8H7ZOosCi.png" alt="">'
+				let dianliang = `<img class="dianliang_img" src="${this.dianliangImg}" alt="">`
+				let closeImg = `<img class="close_img" src="https://i.loli.net/2021/10/17/sGVk38N9eLgQacf.png">`
+				// let closeImg = `<a class="close_img" href="javascript:${that.closeInfobox(11)}" class="customInfoboxCloseButton">X</a>`
+				let infobox = new Microsoft.Maps.Infobox(new Microsoft.Maps.Location(pin.geometry.y, pin.geometry.x), {
+				  htmlContent: infoboxTemplate.replace('{firstLabel}',this.$t('home.firstLable')).replace('{secondLabel}',this.$t('home.secondLabel')).replace('{threeLabel}',this.$t('home.threeLabel'))
+				  .replace('{address}',this.$t('home.address')).replace('{sudu}',this.$t('home.sudu')).replace('{shidu}',this.$t('home.shidu'))
+				  .replace('{qiya}',this.$t('home.qiya')).replace('{dianliang}',this.$t('home.dianliang')).replace('{jia}',this.$t('home.jiasudu'))
+				  .replace('{wendu}',this.$t('home.wendu')).replace('{guangzhao}',this.$t('home.guangzhao')).replace('{dingwei}',this.$t('home.dingwei'))
+				  .replace('{editBtn}',this.$t('home.editBtn')).replace('{guijiBtn}',this.$t('home.guijiBtn'))
+				  .replace(/{title}/g,pin.entity.title).replace(/{shebei}/g,shebeImg).replace(/{closeImg}/g,closeImg).replace(/{dianliang}/g,dianliang)
+				});
+				infobox.setMap(this.map);
+				infobox.setOptions({
+				  visible: true,
+				  offset: new Microsoft.Maps.Point(-259, 50)
+				});
+				this.circleArray.push({id: pin.entity.title,infobox: infobox});
+				this.$nextTick(() => {
+				  //关闭弹窗事件
+					closeImgDom = document.querySelectorAll('.close_img');
+					editDom = document.querySelectorAll('.edit_div');
+					editDom[editDom.length - 1].addEventListener('click',(e)=>{
+					  this.editShow = true;
+						console.log(this.editShow)
+					})
+				  closeImgDom[closeImgDom.length - 1].addEventListener('click',(e)=>{
+				    infobox.setOptions({
+				      visible: false,
+				    });
+				  })
+				})
+			}
     },
     //获取点
     createdMarker() {
