@@ -1,7 +1,7 @@
 <template>
   <div class="sideBar" :class="{'sideBar_short':isCollapse==true}" >
-    <img class="logo" v-if="!isCollapse" src="@/assets/img/home/logo@2x.png" alt="">
-    <img class="logo1" v-else src="@/assets/img/home/logo1@2x.png" alt="">
+    <img class="logo" v-show="!isCollapse" src="@/assets/img/home/logo@2x.png" alt="">
+    <img class="logo1" v-show="isCollapse" src="@/assets/img/home/logo1@2x.png" alt="">
     <el-menu :default-active="NavActive" class="el-menu-vertical-demo" :router="true" :collapse="isCollapse" :collapse-transition="true" :StaticEnableDefaultPopOutImage="false">
       <div v-for="(item,index) in menuData" :key="index">
         <el-submenu :index="item.router" v-if="item.children && item.children.length" :class="{'submenu_box':NavActive.indexOf(item.router)!=-1}">

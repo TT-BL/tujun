@@ -1,6 +1,6 @@
 // 设置
 <template>
-  <div>设置</div>
+  <div>可视化</div>
 </template>
 
 <script>

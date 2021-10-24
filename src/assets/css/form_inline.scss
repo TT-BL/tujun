@@ -1,0 +1,130 @@
+$main_color:#12C6C5;
+/deep/ .el-form--inline{
+  .el-form-item{
+    margin-right: 51px;
+  }
+  .el-form-item__label{
+    font-size: 16px;
+    font-weight: 600;
+    color: #151F2E;
+  }
+  .el-input__inner{
+    width: 160px;
+    height: 40px;
+  }
+  .el-input__inner::-webkit-input-placeholder{
+    color: #666;
+    font-size: 16px;
+  }
+  .el-input__inner::-moz-placeholder{  //不知道为何火狐的placeholder的颜色是粉红色，怎么改都不行，希望有大牛路过帮忙指点
+    color: #666;  
+    font-size: 16px;
+  }
+  .el-input__inner:-ms-input-placeholder{  //由于我的IE刚好是IE9，支持不了placeholder，所以也测试不了(⊙﹏⊙)，有IE10以上的娃可以帮我试试
+    color: #666;  
+    font-size: 16px;
+  }
+  .select_min{
+    width: 100px;
+  }
+  .el-input__inner{
+    width: 160px;
+    font-size: 16px;
+    color: #1A1E32;
+  }
+  //时间选择器
+  .el-date-editor--datetimerange{
+    width: 415px;
+    height: 40px;
+  }
+  .el-date-editor--date{
+    width: 160px;
+    height: 40px;
+  }
+  .el-range-input{
+    font-size: 16px;
+    color: #1A1E32;
+  }
+  .el-button{
+    margin-left: 0;
+    width: 88px;
+    height: 40px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: none;
+  }
+  .el-button--primary{
+    background: $main_color;
+    color: #FFFFFF;
+    margin-right: 20px;
+  }
+  .el-button--default{
+    background: #fff;
+    border: 1px solid $main_color;
+    color: $main_color;
+  }
+}
+//选择框
+.el-select-dropdown{
+  .el-select-dropdown__item{
+    font-size: 16px;
+    color: #151F2E;
+  }
+  .el-select-dropdown__item.selected{
+    font-size: 16px;
+    background: #12C6C5;
+    border-radius: 4px;
+    color: #FFFFFF;
+  }
+}
+//分页
+/deep/ .el-pagination{
+  float: right;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #999999;
+  .btn-next,.btn-prev,.number{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    padding: 0;
+    background: #FFFFFF;
+    border-radius: 4px;
+    border: 1px solid #D8D8D8;
+    :hover{
+      color: $main_color;
+    }
+  }
+  .active{
+    background: $main_color;
+    color: #fff;
+  }
+  .el-pagination__jump{
+    margin-left: 30px;
+    .el-input__inner{
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      padding: 0;
+      background: #FFFFFF;
+      border-radius: 4px;
+      border: 1px solid #D8D8D8;
+    }
+  }
+  .el-select{
+    height: 30px;
+    .el-input__inner{
+      height: 30px;
+      border: 1px solid #D8D8D8;
+    }
+  }
+}
+/deep/ .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{
+  background: #12C6C5;
+  border-radius: 4px;
+  color: #FFFFFF;
+}
+/deep/ .el-select-dropdown__item{
+  font-size: 16px;
+  color: #151F2E;
+}

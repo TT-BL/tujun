@@ -1,21 +1,84 @@
 /deep/ .el-form{
+  .el-form-item{
+    // display: flex;
+    // align-items: center;
+    margin-bottom: 20px;
+    padding-left: 99px;
+  }
   .el-form-item__label{
     font-size: 16px;
     font-weight: 600;
     color: #151F2E;
+    // margin-right: 40px;
+    padding-right: 40px;
+  }
+  .el-form-item__content{
+    width: 280px;
+    height: 40px;
+  }
+  .el-input__inner{
+    width: 280px;
+    height: 40px;
+    color: #1A1E32;
+    font-size: 16px;
+  }
+  .el-input__inner::-webkit-input-placeholder{
+    color: #666;
+    font-size: 16px;
+  }
+  .el-input__inner::-moz-placeholder{  //不知道为何火狐的placeholder的颜色是粉红色，怎么改都不行，希望有大牛路过帮忙指点
+    color: #666;  
+    font-size: 16px;
+  }
+  .el-input__inner:-ms-input-placeholder{  //由于我的IE刚好是IE9，支持不了placeholder，所以也测试不了(⊙﹏⊙)，有IE10以上的娃可以帮我试试
+    color: #666;  
+    font-size: 16px;
+  }
+  //选择框
+  .el-select{
+    .el-input__inner{
+      color: #37B23C;
+      font-size: 16px;
+    }
+  }
+  
+  .button_item{
+    margin-top: 40px;
+    padding-left: 162px;
+    .el-form-item__content{
+      display: flex;
+      align-items: center;
+      margin-left: 0!important;
+    }
   }
   .el-button{
     width: 88px;
     height: 40px;
     border-radius: 4px;
     font-size: 16px;
+    border: none;
   }
   .el-button--primary{
     background: #12C6C5;
     color: #FFFFFF;
+    margin-left: 0;
   }
   .el-button--default{
-    border: 1px solid #12C6C5;
-    color: #12C6C5;
+    background: #fff;
+    border: 1px solid #999;
+    color: #999;
+    margin-right: 50px;
   }
+  .confirm_btn{
+    width: 280px;
+  }
+}
+/deep/ .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{
+  background: #12C6C5;
+  border-radius: 4px;
+  color: #FFFFFF;
+}
+/deep/ .el-select-dropdown__item{
+  font-size: 16px;
+  color: #151F2E;
 }

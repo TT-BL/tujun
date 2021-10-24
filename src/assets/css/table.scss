@@ -1,0 +1,82 @@
+$mainColor: rgba(18, 198, 197, .3);
+$mainColor1: #12C6C5;
+/deep/ .el-table{
+  // height: 783px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 4px 3px rgba(27, 32, 77, 0.07);
+  border-radius: 10px;
+  font-size: 16px;
+  .el-table__body tr.el-table__row--striped td.el-table__cell{
+    background: rgba(18, 198, 197, .06);
+  }
+  .el-table__cell{
+    height: 60px;
+  }
+  th.el-table__cell{
+    background: $mainColor;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222D41;
+  }
+  td.el-table__cell{
+    font-size: 16px;
+    color: #666;
+  }
+  .active_div{
+    display: flex;
+  }
+  .el-checkbox__inner{
+    border-color: #999;
+  }
+  .el-checkbox__input.is-checked .el-checkbox__inner{
+    background: #fff;
+    border-color: $mainColor1;
+    color: $mainColor1;
+  }
+  .el-checkbox__inner::after{
+    border: 1px solid $mainColor1;
+    border-left: 0;
+    border-top: 0;
+  }
+  .green{
+    color: $mainColor1;
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  .red{
+    color: #E62329;
+    cursor: pointer;
+  }
+  .status_div{
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #37B23C;
+    .circle{
+      width: 6px;
+      height: 6px;
+      margin-right: 8px;
+      background: #37B23C;
+      border-radius: 50%;
+    }
+  }
+  .stop_div{
+    color: #E62329;
+    .circle{
+      background: #E62329;
+    }
+  }
+  .empty_div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 90px 0;
+    font-size: 16px;
+    color: #1A1E32;
+    .empty_img{
+      width: 509px;
+      height: 274px;
+      margin-bottom: 20px;
+    }
+  }
+}

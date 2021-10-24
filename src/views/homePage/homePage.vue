@@ -38,22 +38,21 @@
       </div>
       <div id='myMap'></div>
     </div>
-		<editPop v-if="editShow"></editPop>
-    <trajectory/>
+		<editPop v-if="editShow" @closePop="closeEdit"></editPop>
+    <trajectory  v-if="trajectShow" @closePop="closeTraject"/>
   </div>
 </template>
 
 
 <script>
 import editPop from './homePageBox/editPop.vue';
-import trajectory from './trajectory.vue'
+import trajectory from './homePageBox/trajectory.vue'
 export default {
 	components:{
 		editPop,trajectory
 	},
   data() {
     return {
-      title: 1111,
       map: '',
       infobox: '',
       locations: [
@@ -74,6 +73,7 @@ export default {
       dianliangImg: require('../../assets/img/home/dianliang@2x.png'),
 			circleArray: [],
 			editShow: false,
+			trajectShow: false,
     }
   },
   // created() {
@@ -89,6 +89,15 @@ export default {
     },1000)
   },
   methods: {
+    //关闭编辑弹窗
+    closeEdit() {
+      this.editShow = false;
+    },
+    //关闭轨迹弹窗
+    closeTraject() {
+      console.log(111)
+      this.trajectShow = false;
+    },
     loadMapScenario() {
       this.map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
         /* No need to set credentials if already passed in URL */
@@ -166,6 +175,7 @@ export default {
 			let closeImgDom = document.querySelectorAll('.close_img');
 			console.log(closeImgDom);
 			let editDom = document.querySelectorAll('.edit_div');
+			let trajectDom = document.querySelectorAll('.trajectory_btn');
 			//关闭所有弹窗
 			this.circleArray.forEach(value => {
 				value.infobox.setOptions({
@@ -188,6 +198,10 @@ export default {
 				})
 				editDom[index].addEventListener('click',(e)=>{
 				  this.editShow = true;
+					console.log(this.editShow)
+				})
+        trajectDom[index].addEventListener('click',(e)=>{
+				  this.trajectShow = true;
 					console.log(this.editShow)
 				})
 			}else{
@@ -285,6 +299,10 @@ export default {
 					editDom[editDom.length - 1].addEventListener('click',(e)=>{
 					  this.editShow = true;
 						console.log(this.editShow)
+					})
+					trajectDom = document.querySelectorAll('.trajectory_btn');
+					trajectDom[trajectDom.length - 1].addEventListener('click',(e)=>{
+					  this.trajectShow = true;
 					})
 				  closeImgDom[closeImgDom.length - 1].addEventListener('click',(e)=>{
 				    infobox.setOptions({
@@ -436,7 +454,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-  @import '../../assets/css/form.scss';
   .header_statistics{
     display: flex;
     justify-content: space-between;

@@ -12,27 +12,23 @@ export const menuData = {
       icon: 'shebei@2x.png',
       icon_active: 'shebei_active@2x.png',
       router: '/deviceManagement',
-      children: []
+      children: [
+        {
+          name: '设备列表',
+          router: '/deviceManagement/deviceList',
+        },
+        {
+          name: '设备上报记录',
+          router: '/deviceManagement/devideRecord',
+        },
+      ]
     },
     {
       name: '账号管理',
       icon: 'zhanghao@2x.png',
       icon_active: 'zhanghao_active@2x.png',
       router: '/accountManagement',
-      children: [
-        {
-          name: '账号列表',
-          icon: '',
-          router: '/accountManagement/accountList',
-          children: []
-        },
-        {
-          name: '添加列表',
-          icon: '',
-          router: '/accountManagement/addAcount',
-          children: []
-        }
-      ]
+      children: [],
     },
     {
       name: '微信管理',
@@ -42,9 +38,9 @@ export const menuData = {
       children: []
     },
     {
-      name: '系统设置',
-      icon: 'setting@2x.png',
-      icon_active: 'setting_active@2x.png',
+      name: '数据可视化',
+      icon: 'keshi@2x.png',
+      icon_active: 'keshi_active@2x.png',
       router: '/setting',
       children: []
     },
